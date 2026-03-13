@@ -86,7 +86,7 @@ function toPlanet(body: ApiBody): TPlanet {
 }
 
 function getSolarApiHeaders(): HeadersInit | undefined {
-  const token = process.env.SOLAR_API_TOKEN ?? process.env.NEXT_PUBLIC_SOLAR_API_TOKEN;
+  const token = process.env.SOLAR_API_TOKEN ?? '';
 
   if (!token) {
     return undefined;
