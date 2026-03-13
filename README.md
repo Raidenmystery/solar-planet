@@ -42,7 +42,7 @@ SOLAR_SYSTEM_API_URL=https://api.le-systeme-solaire.net/rest/bodies?filter[]=isP
 NASA_IMAGE_SEARCH_URL=https://images-api.nasa.gov/search
 ```
 
-Token for solar API (used only when provided):
+Token for solar API (used only when provided, you need to generate an api key in the following link: https://api.le-systeme-solaire.net/generatekey.html):
 
 ```bash
 SOLAR_API_TOKEN=
