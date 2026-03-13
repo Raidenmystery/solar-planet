@@ -1,4 +1,4 @@
-import { Planet, PlanetFactSection } from "@/types/planet";
+import { TPlanet, TPlanetFactSection } from "@/types/planet";
 import { ApiBody, ApiResponse } from "@/types/solarSystemApi";
 import {
   API_URL,
@@ -38,7 +38,7 @@ function formatScientific(
   return `${source.volValue} x10^${source.volExponent}`;
 }
 
-function sections(body: ApiBody): PlanetFactSection[] {
+function sections(body: ApiBody): TPlanetFactSection[] {
   return [
     {
       title: "Orbital Profile",
@@ -67,7 +67,7 @@ function sections(body: ApiBody): PlanetFactSection[] {
   ];
 }
 
-function toPlanet(body: ApiBody): Planet {
+function toPlanet(body: ApiBody): TPlanet {
   const slug = slugify(body.englishName);
   const visual = VISUALS[slug];
 
@@ -97,7 +97,7 @@ function getSolarApiHeaders(): HeadersInit | undefined {
   };
 }
 
-export async function fetchPlanetsFromApi(): Promise<Planet[]> {
+export async function fetchPlanetsFromApi(): Promise<TPlanet[]> {
   if (!API_URL) {
     throw new Error("SOLAR_SYSTEM_API_URL is not configured.");
   }
