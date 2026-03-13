@@ -52,6 +52,36 @@ NEXT_PUBLIC_SOLAR_API_TOKEN=
 
 - `/`: planet list page.
 - `/planets/[slug]`: planet detail page.
+- `/api/planets`: planet proxy route (solar API + NASA image enrichment).
+- `/api/health`: deployment health check (validates required env vars and external API reachability).
+
+Health check response example:
+
+```json
+{
+	"ok": true,
+	"timestamp": "2026-03-13T13:00:00.000Z",
+	"missingEnv": [],
+	"dependencies": [
+		{
+			"name": "solarSystemApi",
+			"urlConfigured": true,
+			"reachable": true,
+			"statusCode": 200,
+			"durationMs": 310,
+			"error": null
+		},
+		{
+			"name": "nasaImageApi",
+			"urlConfigured": true,
+			"reachable": true,
+			"statusCode": 200,
+			"durationMs": 210,
+			"error": null
+		}
+	]
+}
+```
 
 ## Run Locally
 
