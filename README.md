@@ -21,10 +21,10 @@ This app renders a solar planet list using card components and navigates to a pl
 - `components/molecules`: composed UI units such as cards and stat rows.
 - `components/organisms`: larger sections such as list grid and detail body.
 - `components/templates`: page-level composition wrappers.
-- `components/providers/AppProviders.tsx`: React Query provider.
+- `providers/AppProviders.tsx`: React Query provider.
 - `hooks/usePlanetsQuery.ts`: planets list query against local `/api/planets` route.
 - `store/planetStore.ts`: Zustand store for UI-only state (`searchTerm`) plus selector helpers.
-- `lib/solarSystemAPI/solarSystemAPI.ts`: API adapters and mapping functions.
+- `lib/solarSystemAPI`: API adapters and mapping functions.
 - `app/api/planets/route.ts`: server-side proxy to external APIs (planet data + image enrichment, avoids browser CORS).
 
 ## Environment Variables
@@ -67,5 +67,58 @@ Open `http://localhost:3000`.
 ```bash
 npm run lint
 npm run build
+```
+
+## React Component Standard
+
+Every React component should be created in `TSX`, following the template below.
+Do not delete comments, as they are used to separate different React Hooks features.
+
+```tsx
+export const ExampleComponent = () => {
+	// Hooks
+
+	// Local state
+
+	// Refs
+
+	// Redux
+
+	// Side effects
+
+	// Data and handlers
+
+	return <div>Example</div>;
+};
+```
+
+Each section represents a different part of the component implementation, and the comments provide visual separation.
+
+- `Hooks`: custom React hooks used by the component (for example, `useSomeCustomHook`, `useTable`, `useRouter`, `useNotification`).
+- `Local state`: strict local component state hooks, such as `useState`.
+- `Refs`: React refs to DOM elements or component instances, such as `useRef`.
+- `Redux`: Redux-related or Context-related logic, such as `useContext` and `useReducer`.
+- `Side effects`: side-effect logic, such as API calls, subscriptions, and DOM interactions (`useEffect`, `useLayoutEffect`).
+- `Data and handlers`: memoized data and event handlers, such as `useCallback` and `useMemo`.
+
+## Atomic Design File Organization
+
+We keep the following organization for component files using Atomic Design methodology:
+
+```text
+/components
+|---/atoms
+|---/molecules
+|---/organisms
+|---/templates
+|---/MyComponent
+|   |---index.ts
+|   |---MyComponent.tsx
+|   |---MyComponent.stories.tsx
+|   |---MyComponent.test.tsx
+|   |---MyComponent.styles.scss
+|   |---MyComponent.constants.ts
+|   |---MyComponent.types.ts
+|   |---MyComponent.functions.ts
 ```
 
