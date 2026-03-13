@@ -1,40 +1,71 @@
-# solar-planet
-This a small project to display a list of solar planets and select it to see the details
+# Solar Planet Explorer
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Atomic Design project built with Next.js App Router.
 
-## Getting Started
+This app renders a solar planet list using card components and navigates to a planet detail view when a card is clicked.
 
-First, run the development server:
+## Tech Stack
+
+- Next.js 16 (App Router)
+- TypeScript
+- Tailwind CSS v4
+- Zustand (UI state)
+- TanStack React Query (server data fetching and caching)
+- External APIs:
+	- `https://api.le-systeme-solaire.net`
+	- `https://images-api.nasa.gov`
+
+## Architecture
+
+- `components/atoms`: small reusable UI primitives.
+- `components/molecules`: composed UI units such as cards and stat rows.
+- `components/organisms`: larger sections such as list grid and detail body.
+- `components/templates`: page-level composition wrappers.
+- `components/providers/AppProviders.tsx`: React Query provider.
+- `hooks/usePlanetsQuery.ts`: planets list query against local `/api/planets` route.
+- `store/planetStore.ts`: Zustand store for UI-only state (`searchTerm`) plus selector helpers.
+- `lib/solarSystemAPI/solarSystemAPI.ts`: API adapters and mapping functions.
+- `app/api/planets/route.ts`: server-side proxy to external APIs (planet data + image enrichment, avoids browser CORS).
+
+## Environment Variables
+
+Create `.env` from `.env.example`:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Required API URLs:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+SOLAR_SYSTEM_API_URL=https://api.le-systeme-solaire.net/rest/bodies?filter[]=isPlanet,eq,true
+NASA_IMAGE_SEARCH_URL=https://images-api.nasa.gov/search
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Token for solar API (used only when provided):
 
-## Learn More
+```bash
+NEXT_PUBLIC_SOLAR_API_TOKEN=
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Routes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `/`: planet list page.
+- `/planets/[slug]`: planet detail page.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Run Locally
 
-## Deploy on Vercel
+```bash
+yarn
+yarn dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Open `http://localhost:3000`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Quality Checks
+
+```bash
+npm run lint
+npm run build
+```
 
