@@ -1,0 +1,1 @@
+export { PlanetDetailPage } from "./PlanetDetailPage"
