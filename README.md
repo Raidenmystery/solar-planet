@@ -45,7 +45,7 @@ NASA_IMAGE_SEARCH_URL=https://images-api.nasa.gov/search
 Token for solar API (used only when provided):
 
 ```bash
-NEXT_PUBLIC_SOLAR_API_TOKEN=
+SOLAR_API_TOKEN=
 ```
 
 ## Routes
