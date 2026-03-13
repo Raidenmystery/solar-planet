@@ -1,6 +1,6 @@
-export const API_URL = process.env.OLAR_SYSTEM_API_URL ?? '';
+export const API_URL = process.env.SOLAR_SYSTEM_API_URL ?? "";
 
-export const NASA_IMAGE_SEARCH_URL = process.env.NASA_IMAGE_SEARCH_URL ?? '';
+export const NASA_IMAGE_SEARCH_URL = process.env.NASA_IMAGE_SEARCH_URL ?? "";
 
 export const VISUALS: Record<
   string,

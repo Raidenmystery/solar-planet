@@ -86,7 +86,7 @@ function toPlanet(body: ApiBody): Planet {
 }
 
 function getSolarApiHeaders(): HeadersInit | undefined {
-  const token = process.env.NEXT_PUBLIC_SOLAR_API_TOKEN;
+  const token = process.env.SOLAR_API_TOKEN ?? process.env.NEXT_PUBLIC_SOLAR_API_TOKEN;
 
   if (!token) {
     return undefined;
@@ -98,6 +98,10 @@ function getSolarApiHeaders(): HeadersInit | undefined {
 }
 
 export async function fetchPlanetsFromApi(): Promise<Planet[]> {
+  if (!API_URL) {
+    throw new Error("SOLAR_SYSTEM_API_URL is not configured.");
+  }
+
   const response = await fetch(API_URL, {
     headers: getSolarApiHeaders(),
     next: { revalidate: 60 * 60 * 6 },
@@ -122,12 +126,22 @@ type NasaImageResponse = {
 };
 
 export async function fetchPlanetImageFromApi(planetName: string): Promise<string | null> {
+  if (!NASA_IMAGE_SEARCH_URL) {
+    return null;
+  }
+
   const query = encodeURIComponent(`${planetName} planet`);
   const url = `${NASA_IMAGE_SEARCH_URL}?q=${query}&media_type=image`;
 
-  const response = await fetch(url, {
-    next: { revalidate: 60 * 60 * 24 },
-  });
+  let response: Response;
+
+  try {
+    response = await fetch(url, {
+      next: { revalidate: 60 * 60 * 24 },
+    });
+  } catch {
+    return null;
+  }
 
   if (!response.ok) {
     return null;
