@@ -2,16 +2,16 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-import { Planet } from "@/types/planet";
+import { TPlanet } from "@/types/planet";
 
-async function fetchPlanetsFromRoute(): Promise<Planet[]> {
+async function fetchPlanetsFromRoute(): Promise<TPlanet[]> {
   const response = await fetch("/api/planets");
 
   if (!response.ok) {
     throw new Error("Failed to load planets.");
   }
 
-  return (await response.json()) as Planet[];
+  return (await response.json()) as TPlanet[];
 }
 
 export function usePlanetsQuery() {

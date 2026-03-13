@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { Suspense, useEffect, useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { PlanetGrid } from "@/components/organisms/PlanetGrid";
@@ -14,7 +14,7 @@ import {
   usePlanetStore,
 } from "@/store/planetStore";
 
-export function PlanetsListPage() {
+function PlanetsListPageContent() {
   // --- Hooks -----------------------------------------------------------------
   const router = useRouter();
   const pathname = usePathname();
@@ -173,5 +173,13 @@ export function PlanetsListPage() {
         </footer>
       )}
     </PageShell>
+  );
+}
+
+export function PlanetsListPage() {
+  return (
+    <Suspense fallback={<p className="mt-8 text-sm text-slate-600">Loading planets...</p>}>
+      <PlanetsListPageContent />
+    </Suspense>
   );
 }
