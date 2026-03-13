@@ -4,14 +4,28 @@ import { PlanetDetails } from "@/components/organisms/PlanetDetails";
 import { PageShell } from "@/components/templates/PageShell";
 import { usePlanetsQuery } from "@/hooks/usePlanetsQuery";
 import { findPlanetBySlug } from "@/store/planetStore";
+import { TPlanetDetailPage } from "./PlanetDetailPage.types";
 
-type PlanetDetailPageProps = {
-  slug: string;
-};
-
-export function PlanetDetailPage({ slug }: PlanetDetailPageProps) {
+export function PlanetDetailPage({ slug }: TPlanetDetailPage) {
+  // --- Hooks -----------------------------------------------------------------
   const { data: planets = [], isPending, isError, error } = usePlanetsQuery();
+  // --- END: Hooks ------------------------------------------------------------
+
+  // --- Local state -----------------------------------------------------------
+  // --- END: Local state ------------------------------------------------------
+
+  // --- Refs ------------------------------------------------------------------
+  // --- END: Refs -------------------------------------------------------------
+
+  // --- Redux -----------------------------------------------------------------
+  // --- END: Redux ------------------------------------------------------------
+
+  // --- Side effects ----------------------------------------------------------
+  // --- END: Side effects -----------------------------------------------------
+
+  // --- Data and handlers -----------------------------------------------------
   const planet = findPlanetBySlug(planets, slug);
+  // --- END: Data and handlers ------------------------------------------------
 
   if (isPending) {
     return (

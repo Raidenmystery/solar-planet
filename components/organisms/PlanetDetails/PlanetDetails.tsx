@@ -6,15 +6,29 @@ import Link from "next/link";
 import { SectionTitle } from "@/components/atoms/SectionTitle";
 import { PlanetStatItem } from "@/components/molecules/PlanetStatItem";
 import { usePlanetStore } from "@/store/planetStore";
-import { Planet } from "@/types/planet";
+import { TPlanetDetails } from "./PlanetDetails.types";
 
-type PlanetDetailsProps = {
-  planet: Planet;
-};
 
-export function PlanetDetails({ planet }: PlanetDetailsProps) {
+export function PlanetDetails({ planet }: TPlanetDetails) {
+  // --- Hooks -----------------------------------------------------------------
   const isFavorite = usePlanetStore((state) => state.isFavorite(planet.slug));
   const toggleFavorite = usePlanetStore((state) => state.toggleFavorite);
+  // --- END: Hooks ------------------------------------------------------------
+
+  // --- Local state -----------------------------------------------------------
+  // --- END: Local state ------------------------------------------------------
+
+  // --- Refs ------------------------------------------------------------------
+  // --- END: Refs -------------------------------------------------------------
+
+  // --- Redux -----------------------------------------------------------------
+  // --- END: Redux ------------------------------------------------------------
+
+  // --- Side effects ----------------------------------------------------------
+  // --- END: Side effects -----------------------------------------------------
+
+  // --- Data and handlers -----------------------------------------------------
+  // --- END: Data and handlers ------------------------------------------------
 
   return (
     <section className="mt-8 space-y-8">

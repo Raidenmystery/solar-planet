@@ -5,14 +5,27 @@ import Link from "next/link";
 
 import { Pill } from "@/components/atoms/Pill";
 import { usePlanetStore } from "@/store/planetStore";
-import { Planet } from "@/types/planet";
+import { TPlanetCard } from "./PlanetCard.types";
 
-type PlanetCardProps = {
-  planet: Planet;
-};
-
-export function PlanetCard({ planet }: PlanetCardProps) {
+export function PlanetCard({ planet }: TPlanetCard) {
+  // --- Hooks -----------------------------------------------------------------
   const isFavorite = usePlanetStore((state) => state.isFavorite(planet.slug));
+  // --- END: Hooks ------------------------------------------------------------
+
+  // --- Local state -----------------------------------------------------------
+  // --- END: Local state ------------------------------------------------------
+
+  // --- Refs ------------------------------------------------------------------
+  // --- END: Refs -------------------------------------------------------------
+
+  // --- Redux -----------------------------------------------------------------
+  // --- END: Redux ------------------------------------------------------------
+
+  // --- Side effects ----------------------------------------------------------
+  // --- END: Side effects -----------------------------------------------------
+
+  // --- Data and handlers -----------------------------------------------------
+  // --- END: Data and handlers ------------------------------------------------
 
   return (
     <article
@@ -28,7 +41,7 @@ export function PlanetCard({ planet }: PlanetCardProps) {
       <div className="relative z-0 flex items-start justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2">
           <Pill>{planet.tagline}</Pill>
-          {isFavorite ? (
+          {isFavorite && (
             <Pill
               variant="favorite"
               icon={
@@ -39,7 +52,7 @@ export function PlanetCard({ planet }: PlanetCardProps) {
             >
               Favorite
             </Pill>
-          ) : null}
+          )}
         </div>
         <Image
           src={planet.image}

@@ -1,11 +1,26 @@
 import { PlanetDetailPage } from "@/components/templates/PlanetDetailPage";
 
-type PlanetPageProps = {
+export default async function PlanetSlugPage({ params }: {
 	params: Promise<{ slug: string }>;
-};
+}) {
+	// --- Hooks -----------------------------------------------------------------
+	// --- END: Hooks ------------------------------------------------------------
 
-export default async function PlanetSlugPage({ params }: PlanetPageProps) {
+	// --- Local state -----------------------------------------------------------
 	const { slug } = await params;
+	// --- END: Local state ------------------------------------------------------
+
+	// --- Refs ------------------------------------------------------------------
+	// --- END: Refs -------------------------------------------------------------
+
+	// --- Redux -----------------------------------------------------------------
+	// --- END: Redux ------------------------------------------------------------
+
+	// --- Side effects ----------------------------------------------------------
+	// --- END: Side effects -----------------------------------------------------
+
+	// --- Data and handlers -----------------------------------------------------
+	// --- END: Data and handlers ------------------------------------------------
 
 	return <PlanetDetailPage slug={slug} />;
 }

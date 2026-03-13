@@ -1,23 +1,10 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import { Planet } from "@/types/planet";
+import { TPlanet } from "@/types/planet";
+import { PlanetSortOrder, PlanetUiStore } from "@/types/planetStore";
 
 export const PLANETS_PER_PAGE = 5;
-
-export type PlanetSortOrder = "asc" | "desc";
-
-type PlanetUiStore = {
-  searchTerm: string;
-  sortOrder: PlanetSortOrder;
-  currentPage: number;
-  favoriteSlugs: string[];
-  setSearchTerm: (value: string, options?: { resetPage?: boolean }) => void;
-  setSortOrder: (value: PlanetSortOrder, options?: { resetPage?: boolean }) => void;
-  setCurrentPage: (value: number) => void;
-  toggleFavorite: (slug: string) => void;
-  isFavorite: (slug: string) => boolean;
-};
 
 export const usePlanetStore = create<PlanetUiStore>()(
   persist(
@@ -73,9 +60,9 @@ export const usePlanetStore = create<PlanetUiStore>()(
 );
 
 export const filterPlanetsBySearch = (
-  planets: Planet[],
+  planets: TPlanet[],
   searchTerm: string,
-): Planet[] => {
+): TPlanet[] => {
   const text = searchTerm.trim().toLowerCase();
 
   if (!text) {
@@ -89,9 +76,9 @@ export const filterPlanetsBySearch = (
 };
 
 export const sortPlanetsByName = (
-  planets: Planet[],
+  planets: TPlanet[],
   sortOrder: PlanetSortOrder,
-): Planet[] => {
+): TPlanet[] => {
   const multiplier = sortOrder === "asc" ? 1 : -1;
 
   return [...planets].sort((left, right) => {
@@ -99,7 +86,7 @@ export const sortPlanetsByName = (
   });
 };
 
-export const paginatePlanets = (planets: Planet[], currentPage: number): Planet[] => {
+export const paginatePlanets = (planets: TPlanet[], currentPage: number): TPlanet[] => {
   const page = Math.max(1, Math.floor(currentPage));
   const start = (page - 1) * PLANETS_PER_PAGE;
   return planets.slice(start, start + PLANETS_PER_PAGE);
@@ -109,5 +96,5 @@ export const getTotalPages = (totalItems: number): number => {
   return Math.max(1, Math.ceil(totalItems / PLANETS_PER_PAGE));
 };
 
-export const findPlanetBySlug = (planets: Planet[], slug: string): Planet | undefined =>
+export const findPlanetBySlug = (planets: TPlanet[], slug: string): TPlanet | undefined =>
   planets.find((planet) => planet.slug === slug);

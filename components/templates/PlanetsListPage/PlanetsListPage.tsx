@@ -4,7 +4,7 @@ import { useEffect, useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { PlanetGrid } from "@/components/organisms/PlanetGrid";
-import { PageShell } from "@/components/templates/PageShell";
+import { PageShell } from "@/components/templates/PageShell/PageShell";
 import { usePlanetsQuery } from "@/hooks/usePlanetsQuery";
 import {
   filterPlanetsBySearch,
@@ -15,54 +15,36 @@ import {
 } from "@/store/planetStore";
 
 export function PlanetsListPage() {
+  // --- Hooks -----------------------------------------------------------------
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { data: planets = [], isPending, isError, error } = usePlanetsQuery();
 
-  const searchTerm = usePlanetStore((state) => state.searchTerm);
-  const sortOrder = usePlanetStore((state) => state.sortOrder);
-  const currentPage = usePlanetStore((state) => state.currentPage);
-  const setSearchTerm = usePlanetStore((state) => state.setSearchTerm);
-  const setSortOrder = usePlanetStore((state) => state.setSortOrder);
-  const setCurrentPage = usePlanetStore((state) => state.setCurrentPage);
+  const {
+    searchTerm,
+    sortOrder,
+    currentPage,
+    setSearchTerm,
+    setSortOrder,
+    setCurrentPage
+  } = usePlanetStore((state) => state);
+  // --- END: Hooks ------------------------------------------------------------
 
+  // --- Local state -----------------------------------------------------------
   const urlSearch = searchParams.get("search") ?? "";
   const urlSort = searchParams.get("sort") === "desc" ? "desc" : "asc";
   const rawUrlPage = Number(searchParams.get("page") ?? "1");
   const urlPage = Number.isFinite(rawUrlPage) && rawUrlPage > 0 ? Math.floor(rawUrlPage) : 1;
+  // --- END: Local state ------------------------------------------------------
 
-  useEffect(() => {
-    setSearchTerm(urlSearch, { resetPage: false });
-    setSortOrder(urlSort, { resetPage: false });
-    setCurrentPage(urlPage);
-  }, [setCurrentPage, setSearchTerm, setSortOrder, urlPage, urlSearch, urlSort]);
+  // --- Refs ------------------------------------------------------------------
+  // --- END: Refs -------------------------------------------------------------
 
-  useEffect(() => {
-    const nextParams = new URLSearchParams();
+  // --- Redux -----------------------------------------------------------------
+  // --- END: Redux ------------------------------------------------------------
 
-    if (searchTerm.trim()) {
-      nextParams.set("search", searchTerm.trim());
-    }
-
-    if (sortOrder === "desc") {
-      nextParams.set("sort", "desc");
-    }
-
-    if (currentPage > 1) {
-      nextParams.set("page", String(currentPage));
-    }
-
-    const current = searchParams.toString();
-    const next = nextParams.toString();
-
-    if (current === next) {
-      return;
-    }
-
-    router.replace(next ? `${pathname}?${next}` : pathname, { scroll: false });
-  }, [currentPage, pathname, router, searchParams, searchTerm, sortOrder]);
-
+  // --- Data and handlers -----------------------------------------------------
   const filteredPlanets = useMemo(() => {
     return filterPlanetsBySearch(planets, searchTerm);
   }, [planets, searchTerm]);
@@ -71,24 +53,56 @@ export function PlanetsListPage() {
     return sortPlanetsByName(filteredPlanets, sortOrder);
   }, [filteredPlanets, sortOrder]);
 
+  const paginatedPlanets = useMemo(() => {
+    return paginatePlanets(sortedPlanets, currentPage);
+  }, [currentPage, sortedPlanets]);
+
   const totalPages = getTotalPages(sortedPlanets.length);
+  // --- END: Data and handlers ------------------------------------------------
+
+  // --- Side effects ----------------------------------------------------------
+  useEffect(() => {
+    setSearchTerm(urlSearch, { resetPage: false });
+    setSortOrder(urlSort, { resetPage: false });
+    setCurrentPage(urlPage);
+  }, [setCurrentPage, setSearchTerm, setSortOrder, urlPage, urlSearch, urlSort]);
+  
+  useEffect(() => {
+    const nextParams = new URLSearchParams();
+    
+    if (searchTerm.trim()) {
+      nextParams.set("search", searchTerm.trim());
+    }
+    
+    if (sortOrder === "desc") {
+      nextParams.set("sort", "desc");
+    }
+    
+    if (currentPage > 1) {
+      nextParams.set("page", String(currentPage));
+    }
+    
+    const current = searchParams.toString();
+    const next = nextParams.toString();
+    
+    if (current === next) {
+      return;
+    }
+    
+    router.replace(next ? `${pathname}?${next}` : pathname, { scroll: false });
+  }, [currentPage, pathname, router, searchParams, searchTerm, sortOrder]);
+  
 
   useEffect(() => {
     if (currentPage > totalPages) {
       setCurrentPage(totalPages);
     }
   }, [currentPage, setCurrentPage, totalPages]);
-
-  const paginatedPlanets = useMemo(() => {
-    return paginatePlanets(sortedPlanets, currentPage);
-  }, [currentPage, sortedPlanets]);
+  // --- END: Side effects ----------------------------------------------------- 
 
   return (
     <PageShell>
       <header className="max-w-3xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-700">
-          Atomic Design + Zustand
-        </p>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
           Solar Planet List
         </h1>
@@ -123,19 +137,19 @@ export function PlanetsListPage() {
         </select>
       </header>
 
-      {isPending ? (
+      {isPending && (
         <p className="mt-8 text-sm text-slate-600">Loading planets from API...</p>
-      ) : null}
+      )}
 
-      {isError ? (
+      {isError && (
         <div className="mt-8 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           Could not load planet data. {error instanceof Error ? error.message : "Unexpected error."}
         </div>
-      ) : null}
+      )}
 
-      {!isPending && !isError ? <PlanetGrid planets={paginatedPlanets} /> : null}
+      {(!isPending && !isError) && <PlanetGrid planets={paginatedPlanets} />}
 
-      {!isPending && !isError ? (
+      {(!isPending && !isError) && (
         <footer className="mt-6 flex flex-wrap items-center gap-3">
           <button
             type="button"
@@ -157,7 +171,7 @@ export function PlanetsListPage() {
             Next
           </button>
         </footer>
-      ) : null}
+      )}
     </PageShell>
   );
 }
